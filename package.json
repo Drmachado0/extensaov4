@@ -1,0 +1,10 @@
+{
+  "name": "organic-extension",
+  "private": true,
+  "dependencies": {
+    "sharp": "^0.33.0"
+  },
+  "scripts": {
+    "icons": "node export-icons.js"
+  }
+}

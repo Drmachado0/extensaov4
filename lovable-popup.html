@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Organic</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:420px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0F0F1A;color:#E0E0E0}
+
+/* Header */
+.hd{background:linear-gradient(135deg,#6C5CE7,#A855F7);padding:14px 18px;display:flex;align-items:center;gap:10px}
+.hd h1{font-size:15px;font-weight:600;color:#fff}.hd p{font-size:11px;color:rgba(255,255,255,.75);margin-top:1px}
+.hd .ver{font-size:10px;opacity:.7;margin-left:auto;background:rgba(0,0,0,.2);padding:3px 8px;border-radius:10px;font-weight:600;letter-spacing:.5px}
+
+/* Container */
+.ct{padding:14px 18px;max-height:580px;overflow-y:auto;scroll-behavior:smooth}
+.ct::-webkit-scrollbar{width:4px}
+.ct::-webkit-scrollbar-track{background:transparent}
+.ct::-webkit-scrollbar-thumb{background:#2A2A4A;border-radius:4px}
+.ct::-webkit-scrollbar-thumb:hover{background:#3A3A5A}
+
+/* Status indicators */
+.sc{background:#1A1A2E;border-radius:10px;padding:12px;margin-bottom:10px;border:1px solid #2A2A4A}
+.sr{display:flex;align-items:center;gap:8px;margin-bottom:5px}.sr:last-child{margin-bottom:0}
+.dt{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dt.g{background:#00B894;box-shadow:0 0 6px #00B89488}.dt.r{background:#E17055;box-shadow:0 0 6px #E1705588}.dt.y{background:#FDCB6E}.dt.x{background:#636E72}
+.sl{font-size:12px;color:#A0A0B8;flex:1}.sv{font-size:12px;font-weight:600;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Counters grid */
+.cg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:10px}
+.ci{background:#1A1A2E;border:1px solid #2A2A4A;border-radius:8px;padding:7px;text-align:center}
+.cv{font-size:17px;font-weight:700}.cl{font-size:9px;color:#A0A0B8;text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+.ci.f .cv{color:#00B894}.ci.u .cv{color:#E17055}.ci.l .cv{color:#E84393}.ci.s .cv{color:#FDCB6E}.ci.e .cv{color:#D63031}.ci.b .cv{color:#636E72}
+
+/* Section title */
+.st{font-size:10px;font-weight:600;color:#A0A0B8;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+
+/* Profile card v7.2 — Premium */
+.pcard{background:#1A1A2E;border:1px solid #2A2A4A;border-radius:12px;overflow:hidden;margin-bottom:10px;transition:border-color .3s}
+.pcard:hover{border-color:#3A3A5A}
+.pcard-banner{height:52px;position:relative;overflow:hidden;background:linear-gradient(135deg,#2A2A4A 0%,#1A1A2E 100%);transition:background .4s}
+.pcard-banner.online{background:linear-gradient(135deg,rgba(108,92,231,.2) 0%,rgba(0,184,148,.12) 50%,rgba(168,85,247,.15) 100%)}
+.pcard-banner-pattern{position:absolute;inset:0;opacity:.04;background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:14px 14px}
+.pcard-banner-actions{position:absolute;top:8px;right:8px;display:flex;gap:4px}
+.pcard-body{padding:0 14px 14px}
+.pcard-profile{display:flex;align-items:flex-end;gap:10px;margin-top:-22px}
+.pcard-avatar-wrap{position:relative;flex-shrink:0}
+.pcard-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#6C5CE7,#A855F7);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;box-shadow:0 2px 12px rgba(108,92,231,.25);border:3px solid #1A1A2E}
+.pcard-online-dot{position:absolute;bottom:-1px;right:-1px;width:14px;height:14px;border-radius:50%;border:2.5px solid #1A1A2E;background:#636E72;transition:background .3s,box-shadow .3s}
+.pcard-online-dot.online{background:#00B894;box-shadow:0 0 6px rgba(0,184,148,.5)}
+.pcard-info{flex:1;min-width:0;padding-bottom:2px}
+.pcard-name{font-size:14px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+.pcard-sub{font-size:10px;color:#636E72;margin-top:1px;display:flex;align-items:center;gap:4px;transition:color .3s}
+.pcard-sub.online{color:#00B894}
+.pcard-sub-ping{display:inline-flex;position:relative;width:6px;height:6px}
+.pcard-sub-ping-dot{position:absolute;width:6px;height:6px;border-radius:50%;background:#00B894}
+.pcard-sub-ping-ring{position:absolute;width:6px;height:6px;border-radius:50%;background:#00B894;animation:pcardPing 2s ease-out infinite;opacity:0}
+@keyframes pcardPing{0%{transform:scale(1);opacity:.6}100%{transform:scale(2.5);opacity:0}}
+.pcard-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:12px}
+.pcard-stat{text-align:center;background:#0F0F1A;border:1px solid #2A2A4A;border-radius:8px;padding:8px 4px;transition:border-color .2s}
+.pcard-stat:hover{border-color:#3A3A5A}
+.pcard-stat-icon{font-size:11px;margin-bottom:3px;display:block;opacity:.45}
+.pcard-val{font-size:16px;font-weight:800;color:#fff;line-height:1;letter-spacing:-.3px}
+.pcard-lbl{font-size:8px;color:#636E72;text-transform:uppercase;letter-spacing:.5px;margin-top:3px;font-weight:600}
+.pcard-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid rgba(42,42,74,.5)}
+.pcard-badge{font-size:9px;font-weight:700;padding:3px 10px;border-radius:10px;text-transform:uppercase;letter-spacing:.4px}
+.pcard-badge.online{background:rgba(0,184,148,.1);color:#00B894;border:1px solid rgba(0,184,148,.15)}
+.pcard-badge.offline{background:rgba(99,110,114,.1);color:#636E72;border:1px solid rgba(99,110,114,.15)}
+.pcard-badge.processing{background:rgba(9,132,227,.1);color:#0984e3;border:1px solid rgba(9,132,227,.15)}
+.pcard-badge.paused{background:rgba(253,203,110,.1);color:#FDCB6E;border:1px solid rgba(253,203,110,.15)}
+.pcard-link{font-size:9px;color:#636E72;cursor:pointer;display:flex;align-items:center;gap:3px;transition:color .2s;text-decoration:none}
+.pcard-link:hover{color:#A0A0B8}
+
+/* Control sections */
+.ctrl{background:#1A1A2E;border:1px solid #2A2A4A;border-radius:10px;padding:12px;margin-bottom:10px}
+.ctrl-title{font-size:11px;font-weight:600;color:#6C5CE7;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+
+/* Buttons */
+.ctrl-row{display:flex;gap:6px;margin-bottom:8px}.ctrl-row:last-child{margin-bottom:0}
+.ctrl-btn{flex:1;padding:10px 8px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s;letter-spacing:.3px}
+.ctrl-btn:hover{opacity:.9;transform:translateY(-1px)}.ctrl-btn:active{opacity:.75;transform:translateY(0)}
+.ctrl-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-start{background:linear-gradient(135deg,#00B894,#00a884);color:#fff;box-shadow:0 2px 8px rgba(0,184,148,.3)}
+.btn-stop{background:linear-gradient(135deg,#E17055,#d63031);color:#fff;box-shadow:0 2px 8px rgba(225,112,85,.3)}
+.btn-mode{background:#2A2A4A;color:#E0E0E0;font-size:11px;padding:8px}
+.btn-mode:hover{background:#3A3A5A}
+.btn-open{background:linear-gradient(135deg,#0984e3,#6c5ce7);color:#fff;font-size:11px;padding:8px;box-shadow:0 2px 8px rgba(108,92,231,.3)}
+
+/* Mode grid - 4 columns */
+.mode-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-bottom:8px}
+.mode-opt{background:#0F0F1A;border:1px solid #2A2A4A;border-radius:6px;padding:6px 4px;text-align:center;cursor:pointer;font-size:10px;color:#A0A0B8;transition:all .2s}
+.mode-opt:hover{border-color:#6C5CE7;color:#E0E0E0}
+.mode-opt.active{background:rgba(108,92,231,.15);border-color:#6C5CE7;color:#fff;box-shadow:0 0 8px rgba(108,92,231,.2)}
+.mode-opt .mode-icon{font-size:14px;margin-bottom:2px;display:block}.mode-opt .mode-name{font-weight:600;font-size:9px;line-height:1.3}
+
+/* Like count row */
+.like-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;padding:6px 8px;background:#0F0F1A;border:1px solid #2A2A4A;border-radius:6px}
+.like-row label{font-size:11px;color:#A0A0B8}
+.like-row input{width:42px;background:#1A1A2E;border:1px solid #3A3A5A;border-radius:4px;padding:4px 6px;color:#E0E0E0;font-size:12px;text-align:center;outline:none}
+.like-row input:focus{border-color:#6C5CE7}
+
+/* Safety - Section */
+.safety-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.safety-header .ctrl-title{margin-bottom:0}
+.safety-warmup{font-size:10px;color:#00B894;background:rgba(0,184,148,.1);padding:3px 10px;border-radius:12px;font-weight:600;border:1px solid rgba(0,184,148,.15)}
+
+/* Safety - Cards */
+.safety-cards{display:flex;gap:10px;margin-bottom:10px}
+.safety-card{flex:1;background:#0F0F1A;border:1px solid #2A2A4A;border-radius:10px;padding:12px;position:relative;overflow:hidden;transition:border-color .2s}
+.safety-card:hover{border-color:#3A3A5A}
+.safety-card.warn{border-color:rgba(253,203,110,.3)}
+.safety-card.danger{border-color:rgba(225,112,85,.3);animation:pulse-danger 2s ease-in-out infinite}
+@keyframes pulse-danger{0%,100%{box-shadow:0 0 0 rgba(225,112,85,0)}50%{box-shadow:0 0 12px rgba(225,112,85,.15)}}
+
+.safety-card-icon{font-size:16px;margin-bottom:6px;display:block;opacity:.7}
+.safety-card-current{font-size:22px;font-weight:800;color:#fff;line-height:1;letter-spacing:-.5px}
+.safety-card-sep{font-size:14px;font-weight:400;color:#636E72;margin:0 1px}
+.safety-card-limit{font-size:14px;font-weight:600;color:#8A8AA8}
+.safety-card-label{font-size:10px;color:#8A8AA8;text-transform:uppercase;letter-spacing:.5px;margin-top:4px;font-weight:500}
+
+/* Safety - Progress bar */
+.safety-progress{height:4px;background:#2A2A4A;border-radius:3px;margin-top:8px;overflow:hidden}
+.safety-progress-fill{height:100%;border-radius:3px;transition:width .4s ease,background .4s ease}
+.safety-progress-fill.green{background:linear-gradient(90deg,#00B894,#55efc4)}
+.safety-progress-fill.yellow{background:linear-gradient(90deg,#FDCB6E,#f39c12)}
+.safety-progress-fill.red{background:linear-gradient(90deg,#E17055,#d63031)}
+.safety-progress-fill.purple{background:linear-gradient(90deg,#6C5CE7,#a29bfe)}
+
+/* Safety - Editable limits section */
+.safety-limits{background:#0F0F1A;border:1px solid #2A2A4A;border-radius:10px;padding:12px;margin-bottom:10px}
+.safety-limits-title{font-size:10px;font-weight:600;color:#8A8AA8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.safety-limits-title svg{width:12px;height:12px;fill:#8A8AA8}
+.safety-limits-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.safety-limit-item{display:flex;flex-direction:column;gap:3px}
+.safety-limit-label{font-size:9px;color:#636E72;text-transform:uppercase;letter-spacing:.3px;font-weight:500}
+.safety-limit-input{background:#1A1A2E;border:1px solid #2A2A4A;border-radius:6px;padding:7px 8px;color:#E0E0E0;font-size:13px;font-weight:600;text-align:center;outline:none;width:100%;transition:border-color .2s}
+.safety-limit-input:focus{border-color:#6C5CE7;box-shadow:0 0 0 2px rgba(108,92,231,.15)}
+.safety-limit-input:hover{border-color:#3A3A5A}
+.safety-limit-input.session-disabled{opacity:.5;pointer-events:none}
+.safety-auto-renew-row{margin-bottom:6px}
+.safety-toggle-label{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:10px;color:#8A8AA8;font-weight:500}
+.safety-toggle-label input[type=checkbox]{width:14px;height:14px;accent-color:#00B894}
+.safety-toggle-label span{user-select:none}
+.safety-limit-hint{font-size:9px;color:#00B894;margin-top:2px;display:block}
+
+/* Safety - Btn save */
+.safety-save-row{display:flex;gap:8px;align-items:center;margin-top:10px}
+.safety-save-btn{background:linear-gradient(135deg,#00B894,#00a884);color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:4px}
+.safety-save-btn:hover{opacity:.9;transform:translateY(-1px)}.safety-save-btn:active{transform:translateY(0)}
+.safety-save-msg{font-size:10px;color:#00B894;opacity:0;transition:opacity .3s}
+.safety-save-msg.show{opacity:1}
+
+/* Safety - Preset buttons */
+.safety-preset-btn{flex:1;background:#1A1A2E;border:1px solid #2A2A4A;border-radius:8px;color:#aab;font-size:10px;font-weight:600;padding:6px 4px;cursor:pointer;transition:all .2s;text-align:center;line-height:1.3}
+.safety-preset-btn:hover{border-color:#00B894;color:#dde}
+.safety-preset-btn.active{background:rgba(0,184,148,.12);border-color:#00B894;color:#00B894;box-shadow:0 0 8px rgba(0,184,148,.15)}
+
+/* Safety - Info box */
+.safety-info{font-size:10px;padding:8px 10px;border-radius:8px;background:rgba(0,184,148,.06);color:#74b9a8;border:1px solid rgba(0,184,148,.12);margin-top:8px;display:flex;align-items:center;gap:6px;line-height:1.4}
+.safety-info-icon{font-size:13px;flex-shrink:0;color:#00B894}
+
+/* Safety - Alert */
+.safety-alert{font-size:11px;padding:8px 12px;border-radius:8px;background:rgba(225,112,85,.08);color:#E17055;border:1px solid rgba(225,112,85,.15);margin-top:8px;align-items:center;gap:6px;line-height:1.4;display:none}
+.safety-alert.visible{display:flex}
+.safety-alert-icon{font-size:14px;flex-shrink:0}
+
+/* ============ SCHEDULE / CALENDAR ============ */
+.sched-section{background:#1A1A2E;border:1px solid #2A2A4A;border-radius:10px;margin-bottom:10px;overflow:hidden}
+.sched-header{display:flex;align-items:center;justify-content:space-between;padding:12px;cursor:pointer;user-select:none;transition:background .15s}
+.sched-header:hover{background:rgba(108,92,231,.05)}
+.sched-header .ctrl-title{margin-bottom:0;pointer-events:none}
+.sched-toggle{font-size:11px;color:#8A8AA8;display:flex;align-items:center;gap:6px}
+.sched-chevron{transition:transform .2s;font-size:14px}
+.sched-chevron.open{transform:rotate(180deg)}
+.sched-master-toggle{position:relative;width:36px;height:20px;background:#2A2A4A;border-radius:10px;cursor:pointer;transition:background .2s;flex-shrink:0}
+.sched-master-toggle.on{background:#6C5CE7}
+.sched-master-toggle::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.sched-master-toggle.on::after{transform:translateX(16px)}
+.sched-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.sched-body.open{max-height:1200px}
+.sched-inner{padding:0 12px 12px}
+
+/* Day rows */
+.sched-days{display:flex;flex-direction:column;gap:6px}
+.sched-day{background:#0F0F1A;border:1px solid #2A2A4A;border-radius:8px;overflow:hidden;transition:border-color .2s}
+.sched-day.active{border-color:rgba(108,92,231,.3)}
+.sched-day.today{border-color:rgba(108,92,231,.5);box-shadow:0 0 8px rgba(108,92,231,.1)}
+
+/* Day header row */
+.sched-day-head{display:flex;align-items:center;padding:8px 10px;gap:8px}
+.sched-day-toggle{position:relative;width:28px;height:16px;background:#2A2A4A;border-radius:8px;cursor:pointer;transition:background .2s;flex-shrink:0}
+.sched-day-toggle.on{background:#00B894}
+.sched-day-toggle::after{content:'';position:absolute;top:2px;left:2px;width:12px;height:12px;background:#fff;border-radius:50%;transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.sched-day-toggle.on::after{transform:translateX(12px)}
+.sched-day-name{font-size:11px;font-weight:700;color:#E0E0E0;width:32px;flex-shrink:0;text-transform:uppercase}
+.sched-day-name.inactive{color:#636E72}
+
+/* Time inputs */
+.sched-time-group{display:flex;align-items:center;gap:3px;flex-shrink:0}
+.sched-time-input{background:#1A1A2E;border:1px solid #2A2A4A;border-radius:4px;padding:3px 4px;color:#E0E0E0;font-size:11px;font-weight:500;width:50px;text-align:center;outline:none}
+.sched-time-input:focus{border-color:#6C5CE7}
+.sched-time-sep{color:#636E72;font-size:10px;font-weight:600}
+
+/* Day expand row (targets) */
+.sched-day-detail{display:none;padding:6px 10px 8px;border-top:1px solid #1A1A2E;background:rgba(15,15,26,.5)}
+.sched-day.active .sched-day-detail{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+
+/* Target mini inputs */
+.sched-target{display:flex;align-items:center;gap:4px;background:#1A1A2E;border:1px solid #2A2A4A;border-radius:6px;padding:4px 8px}
+.sched-target-icon{font-size:12px;flex-shrink:0}
+.sched-target-input{background:transparent;border:none;color:#E0E0E0;font-size:12px;font-weight:600;width:38px;text-align:center;outline:none}
+.sched-target-input:focus{color:#6C5CE7}
+.sched-target-label{font-size:9px;color:#636E72;white-space:nowrap}
+
+/* Mode selector mini */
+.sched-mode-select{background:#1A1A2E;border:1px solid #2A2A4A;border-radius:6px;padding:4px 6px;color:#E0E0E0;font-size:10px;outline:none;cursor:pointer;flex:1;min-width:0}
+.sched-mode-select:focus{border-color:#6C5CE7}
+
+/* Schedule footer */
+.sched-footer{display:flex;gap:8px;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid #2A2A4A}
+.sched-save-btn{background:linear-gradient(135deg,#6C5CE7,#A855F7);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:4px}
+.sched-save-btn:hover{opacity:.9;transform:translateY(-1px)}.sched-save-btn:active{transform:translateY(0)}
+.sched-save-msg{font-size:10px;color:#00B894;opacity:0;transition:opacity .3s}
+.sched-save-msg.show{opacity:1}
+.sched-status{font-size:10px;color:#636E72;margin-left:auto}
+.sched-status.active{color:#00B894}
+
+/* Meta info */
+.meta{display:flex;gap:6px;margin-bottom:10px}
+.meta-item{background:#1A1A2E;border:1px solid #2A2A4A;border-radius:8px;padding:5px 8px;flex:1;text-align:center}
+.meta-val{font-size:13px;font-weight:700;color:#6C5CE7}.meta-lbl{font-size:9px;color:#8A8AA8;margin-top:1px}
+
+/* Forms */
+.fd{margin-bottom:10px}.fl{font-size:11px;color:#8A8AA8;margin-bottom:4px;display:block}
+.fd input{width:100%;background:#1A1A2E;border:1px solid #2A2A4A;border-radius:8px;padding:10px 12px;font-size:13px;color:#E0E0E0;outline:none}
+.fd input:focus{border-color:#6C5CE7}.fd input::placeholder{color:#4A4A6A}
+
+/* Primary/secondary/danger buttons */
+button.main{background:linear-gradient(135deg,#6C5CE7,#A855F7);color:#fff;border:none;border-radius:8px;padding:11px;font-size:13px;font-weight:600;cursor:pointer;width:100%;box-shadow:0 2px 8px rgba(108,92,231,.3)}
+button.main:hover{opacity:.9}button.main:disabled{opacity:.5;cursor:not-allowed}
+.sec{background:#2A2A4A;font-weight:500;font-size:11px;padding:9px;border:none;border-radius:8px;color:#E0E0E0;cursor:pointer;width:100%}
+.sec:hover{background:#3A3A5A}
+.dan{background:linear-gradient(135deg,#E17055,#D63031);font-size:11px;padding:9px;border:none;border-radius:8px;color:#fff;cursor:pointer;width:100%}
+
+/* Misc */
+.br{display:flex;gap:6px;margin-bottom:6px}.br button{flex:1}
+.msg{font-size:11px;padding:7px 10px;border-radius:6px;margin-top:6px;display:none}
+.msg.ok{display:block;background:rgba(0,184,148,.15);color:#00B894;border:1px solid rgba(0,184,148,.3)}
+.msg.er{display:block;background:rgba(225,112,85,.15);color:#E17055;border:1px solid rgba(225,112,85,.3)}
+.msg.in{display:block;background:rgba(108,92,231,.15);color:#A0A0C8;border:1px solid rgba(108,92,231,.3)}
+.dv{height:1px;background:#2A2A4A;margin:8px 0}
+.ub{background:#2A2A4A;border-radius:6px;padding:6px 10px;font-size:11px;color:#A0A0B8;margin-bottom:10px}.ub strong{color:#E0E0E0}
+.hidden{display:none!important}
+.sync-info{font-size:10px;color:#636E72;margin-top:4px;text-align:center}
+.status-text{font-size:10px;color:#636E72;margin-top:4px;padding:4px 8px;background:#0F0F1A;border-radius:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sp{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;margin-right:6px;vertical-align:middle}
+
+/* Scheduler mini-bar (abaixo do header quando scheduler ativo) */
+.sched-mini{background:rgba(108,92,231,.1);border-bottom:1px solid rgba(108,92,231,.2);padding:6px 18px;display:flex;align-items:center;gap:8px}
+.sched-mini-text{font-size:10px;color:#A0A0C8;font-weight:600;white-space:nowrap;min-width:0;flex-shrink:0}
+.sched-mini-bar{flex:1;height:4px;background:#2A2A4A;border-radius:3px;overflow:hidden}
+.sched-mini-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#6C5CE7,#A855F7);transition:width .4s ease}
+
+/* Health Score (indicador circular na seção de proteção) */
+.health-score{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:10px;background:#0F0F1A;border:1px solid #2A2A4A;border-radius:10px}
+.health-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;position:relative}
+.health-circle.green{background:conic-gradient(#00B894 var(--pct),#2A2A4A 0);box-shadow:0 0 8px rgba(0,184,148,.2)}
+.health-circle.yellow{background:conic-gradient(#FDCB6E var(--pct),#2A2A4A 0);box-shadow:0 0 8px rgba(253,203,110,.2)}
+.health-circle.red{background:conic-gradient(#E17055 var(--pct),#2A2A4A 0);box-shadow:0 0 8px rgba(225,112,85,.2)}
+.health-circle-inner{width:32px;height:32px;border-radius:50%;background:#0F0F1A;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.health-details{flex:1;min-width:0}
+.health-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.health-label.green{color:#00B894}.health-label.yellow{color:#FDCB6E}.health-label.red{color:#E17055}
+.health-sub{font-size:9px;color:#636E72;line-height:1.4}
+.health-countdown{font-size:10px;color:#E17055;font-weight:600;margin-top:4px}
+
+/* Sync details row */
+.sync-details{display:flex;gap:10px;justify-content:center;font-size:9px;color:#636E72;margin-top:2px}
+.sync-detail{display:flex;align-items:center;gap:3px}
+.sync-detail .dot-ok{width:5px;height:5px;border-radius:50%;background:#00B894}
+.sync-detail .dot-err{width:5px;height:5px;border-radius:50%;background:#E17055}
+
+/* ═══ Safety Guard v2 CSS ═══════════════════════════════════════════════ */
+.sv2-risk-panel{background:#12122A;border:1px solid #2A2A4A;border-radius:8px;padding:10px 12px;margin-bottom:10px}
+.sv2-risk-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:12px;font-weight:600}
+.sv2-risk-label{color:#00B894}
+.sv2-risk-pct{color:#888;font-size:11px}
+.sv2-thermometer{position:relative;height:8px;background:#1E1E3A;border-radius:4px;overflow:visible;margin-bottom:6px}
+.sv2-therm-fill{height:100%;border-radius:4px;transition:width .5s ease,background .5s ease}
+.sv2-therm-mark{position:absolute;top:-4px;transform:translateX(-50%);width:2px;height:16px;background:rgba(255,255,255,.25)}
+.sv2-therm-mark-label{position:absolute;top:18px;left:50%;transform:translateX(-50%);font-size:8px;color:rgba(255,255,255,.4);white-space:nowrap}
+.sv2-cooldown-bar{display:flex;align-items:center;gap:6px;margin-top:6px;background:rgba(214,48,49,.12);border:1px solid rgba(214,48,49,.3);border-radius:6px;padding:5px 8px;font-size:11px;color:#D63031;font-weight:600}
+.sv2-cooldown-reason{color:rgba(214,48,49,.7);font-size:10px;margin-left:auto}
+.sv2-incidents{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.sv2-inc{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600}
+.sv2-inc-block{background:rgba(214,48,49,.15);color:#D63031}
+.sv2-inc-rate{background:rgba(253,203,110,.12);color:#FDCB6E}
+.sv2-inc-soft{background:rgba(225,112,85,.12);color:#E17055}
+.sv2-budget-panel{background:#12122A;border:1px solid #2A2A4A;border-radius:8px;padding:10px 12px;margin-bottom:10px}
+.sv2-budget-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;font-size:12px}
+.sv2-budget-title{font-weight:600;color:#aab}
+.sv2-budget-nums{font-weight:700;color:#dde;font-size:13px}
+.sv2-budget-bar{height:8px;background:#1E1E3A;border-radius:4px;overflow:hidden;margin-bottom:5px}
+.sv2-budget-fill{height:100%;background:#00B894;border-radius:4px;transition:width .5s ease,background .5s ease}
+.sv2-budget-hint{font-size:10px;color:#666}
+.sv2-mode-btn{flex:1;background:#1A1A2E;border:1px solid #2A2A4A;border-radius:8px;color:#aab;font-size:10px;font-weight:600;padding:6px 4px;cursor:pointer;transition:all .2s;text-align:center;line-height:1.3}
+.sv2-mode-btn:hover{border-color:#00B894;color:#dde}
+.sv2-mode-btn.active{background:rgba(0,184,148,.12);border-color:#00B894;color:#00B894;box-shadow:0 0 8px rgba(0,184,148,.15)}
+.sv2-mode-info{font-size:10px;color:#666;margin-top:5px;padding:0 2px}
+.sv2-window-panel{background:#12122A;border:1px solid #2A2A4A;border-radius:8px;padding:10px 12px;margin-bottom:10px}
+.sv2-window-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.sv2-window-status{font-size:10px}
+.sv2-window-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.sv2-window-field{display:flex;flex-direction:column;gap:2px}
+.sv2-window-field label{font-size:9px;color:#666}
+.sv2-select{background:#1E1E3A;border:1px solid #3A3A5A;border-radius:6px;color:#dde;font-size:11px;padding:4px 6px;cursor:pointer;outline:none}
+.sv2-window-sep{color:#444;font-size:14px;margin-top:10px}
+.sv2-win-save-btn{margin-top:10px;margin-left:auto;background:rgba(0,184,148,.15);border:1px solid #00B894;color:#00B894;border-radius:6px;font-size:11px;font-weight:600;padding:5px 10px;cursor:pointer;transition:all .2s}
+.sv2-win-save-btn:hover{background:rgba(0,184,148,.25)}
+/* ═══════════════════════════════════════════════════════════════════════ */
+</style>
+</head>
+<body>
+<div class="hd">
+  <div><h1>Organic</h1><p>Integracao Direta (sem Bridge)</p></div>
+  <span class="ver" id="verDisplay">v8.14</span>
+</div>
+<div class="sched-mini" id="schedMini" style="display:none">
+  <span class="sched-mini-text" id="schedMiniText">--</span>
+  <div class="sched-mini-bar"><div class="sched-mini-fill" id="schedMiniFill" style="width:0%"></div></div>
+</div>
+<div class="ct">
+  <!-- STATUS -->
+  <div class="sc">
+    <div class="sr"><div class="dt" id="d1"></div><span class="sl">Dashboard</span><span class="sv" id="v1">--</span></div>
+    <div class="sr"><div class="dt" id="d2"></div><span class="sl">Organic</span><span class="sv" id="v2">--</span></div>
+    <div class="sr"><div class="dt" id="d3"></div><span class="sl">Sincronizacao</span><span class="sv" id="v3">--</span></div>
+    <div class="sr"><div class="dt" id="d4"></div><span class="sl">Latencia</span><span class="sv" id="v4">--</span></div>
+  </div>
+
+  <!-- LOGADO -->
+  <div id="on" class="hidden">
+    <div class="ub">Conta: <strong id="ue">--</strong></div>
+
+    <!-- ABRIR ORGANIC -->
+    <div class="ctrl-row" style="margin-bottom:5px">
+      <button class="ctrl-btn btn-open" id="btnOpenIG" style="flex:1">Abrir Instagram + Organic</button>
+    </div>
+    <div class="ctrl-row" style="margin-bottom:10px">
+      <button class="ctrl-btn" id="btnOpenCollector" style="flex:1;background:linear-gradient(135deg,#6C5CE7,#A855F7);color:#fff;font-size:11px;padding:8px;">&#128203; Abrir IG List Collector</button>
+    </div>
+
+    <!-- PERFIL v7.2 -->
+    <div class="pcard" id="pcardMain">
+      <div class="pcard-banner" id="pcardBanner">
+        <div class="pcard-banner-pattern"></div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-profile">
+          <div class="pcard-avatar-wrap">
+            <div class="pcard-avatar" id="pavatar">?</div>
+            <div class="pcard-online-dot" id="pcardDot"></div>
+          </div>
+          <div class="pcard-info">
+            <div class="pcard-name" id="pname">--</div>
+            <div class="pcard-sub" id="psub">
+              <span id="psubText">Aguardando...</span>
+              <span class="pcard-sub-ping" id="psubPing" style="display:none">
+                <span class="pcard-sub-ping-dot"></span>
+                <span class="pcard-sub-ping-ring"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="pcard-stats">
+          <div class="pcard-stat">
+            <span class="pcard-stat-icon">&#128101;</span>
+            <div class="pcard-val" id="pfollowers">--</div>
+            <div class="pcard-lbl">Seguidores</div>
+          </div>
+          <div class="pcard-stat">
+            <span class="pcard-stat-icon">&#128100;</span>
+            <div class="pcard-val" id="pfollowing">--</div>
+            <div class="pcard-lbl">Seguindo</div>
+          </div>
+          <div class="pcard-stat">
+            <span class="pcard-stat-icon">&#128247;</span>
+            <div class="pcard-val" id="pposts">--</div>
+            <div class="pcard-lbl">Posts</div>
+          </div>
+        </div>
+        <div class="pcard-footer">
+          <span class="pcard-badge offline" id="pcardBadge">Offline</span>
+          <a class="pcard-link" id="pcardIgLink" href="#" target="_blank">
+            &#8599; ver perfil
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROLES -->
+    <div class="ctrl">
+      <div class="ctrl-title">CONTROLE DO ORGANIC</div>
+      <div class="st">Modo de Acao</div>
+      <div class="mode-grid">
+        <div class="mode-opt" data-mode="seguir"><div class="mode-icon">+</div><div class="mode-name">Seguir</div></div>
+        <div class="mode-opt active" data-mode="seguir_curtir"><div class="mode-icon">+&hearts;</div><div class="mode-name">Follow+Like</div></div>
+        <div class="mode-opt" data-mode="curtir"><div class="mode-icon">&hearts;</div><div class="mode-name">Curtir</div></div>
+        <div class="mode-opt" data-mode="deixar_seguir"><div class="mode-icon">&minus;</div><div class="mode-name">Unfollow</div></div>
+        <div class="mode-opt" data-mode="remover"><div class="mode-icon">&times;</div><div class="mode-name">Remover</div></div>
+        <div class="mode-opt" data-mode="bloquear"><div class="mode-icon">!</div><div class="mode-name">Bloquear</div></div>
+        <div class="mode-opt" data-mode="ver_story"><div class="mode-icon">&bull;</div><div class="mode-name">Story</div></div>
+        <div class="mode-opt" data-mode="comentar"><div class="mode-icon">&#128172;</div><div class="mode-name">Comentar</div></div>
+        <div class="mode-opt" data-mode="obter_dados"><div class="mode-icon">&darr;</div><div class="mode-name">Dados</div></div>
+      </div>
+
+      <!-- Likes per follow (so aparece no modo Follow+Like) -->
+      <div class="like-row" id="likeCountRow">
+        <label>Curtir</label>
+        <input type="number" id="likeCount" value="1" min="0" max="12" />
+        <label>foto(s) por follow</label>
+      </div>
+
+      <!-- Comment settings (so aparece no modo Comentar) -->
+      <div id="commentModePanel" style="display:none;">
+        <div class="like-row" style="flex-wrap:wrap;gap:6px;">
+          <label style="width:100%;font-size:10px;color:#6C5CE7;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">Configurar Comentarios</label>
+          <div style="display:flex;align-items:center;gap:6px;width:100%;">
+            <label style="font-size:11px;white-space:nowrap;">Max/dia:</label>
+            <input type="number" id="popupMaxComments" value="15" min="1" max="100" style="width:50px;background:#1A1A2E;border:1px solid #3A3A5A;border-radius:4px;padding:4px 6px;color:#E0E0E0;font-size:12px;text-align:center;outline:none;" />
+            <label style="font-size:11px;white-space:nowrap;">Delay (s):</label>
+            <input type="number" id="popupCommentDelay" value="240" min="60" max="600" style="width:56px;background:#1A1A2E;border:1px solid #3A3A5A;border-radius:4px;padding:4px 6px;color:#E0E0E0;font-size:12px;text-align:center;outline:none;" />
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;width:100%;margin-top:2px;">
+            <label style="font-size:10px;color:#A0A0B8;">
+              <input type="checkbox" id="popupCommentRecent" checked style="margin-right:4px;" /> Apenas posts recentes
+            </label>
+            <label style="font-size:10px;color:#A0A0B8;">
+              <input type="checkbox" id="popupCommentVariation" checked style="margin-right:4px;" /> Variacoes
+            </label>
+          </div>
+          <div style="width:100%;margin-top:4px;">
+            <label style="font-size:10px;color:#8A8AA8;">Templates (1 por linha):</label>
+            <textarea id="popupCommentTemplates" rows="4" style="width:100%;background:#1A1A2E;border:1px solid #3A3A5A;border-radius:6px;padding:6px 8px;color:#E0E0E0;font-size:11px;font-family:monospace;resize:vertical;outline:none;" placeholder="Amazing! 🔥&#10;Love this @{username}! {emoji}&#10;Great content! ✨"></textarea>
+          </div>
+          <button class="ctrl-btn btn-mode" id="btnSavePopupComments" style="flex:none;padding:6px 12px;font-size:10px;">Salvar Config</button>
+          <span id="popupCommentSaveMsg" style="font-size:10px;color:#00B894;opacity:0;transition:opacity .3s;"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:#0F0F1A;border:1px solid #2A2A4A;border-radius:6px;margin-top:4px;">
+          <span style="font-size:12px;">&#128172;</span>
+          <span style="font-size:11px;color:#A0A0B8;">Hoje:</span>
+          <span style="font-size:13px;font-weight:700;color:#6C5CE7;" id="popupCommentsToday">0</span>
+          <span style="font-size:11px;color:#636E72;">/</span>
+          <span style="font-size:11px;color:#8A8AA8;" id="popupCommentsMax">20</span>
+        </div>
+      </div>
+
+      <!-- Botoes principais -->
+      <div class="ctrl-row">
+        <button class="ctrl-btn btn-start" id="btnStart">&#9654; Processar Fila</button>
+        <button class="ctrl-btn btn-stop" id="btnStop">&#9632; Parar</button>
+      </div>
+      <div class="ctrl-row">
+        <button class="ctrl-btn btn-mode" id="btnProfile">Atualizar Perfil</button>
+        <button class="ctrl-btn btn-mode" id="btnSyncQueue">Sync Queue</button>
+      </div>
+      <div class="status-text" id="gbStatusText">Aguardando...</div>
+    </div>
+
+    <!-- SCRAPE removido -->
+
+    <!-- CALENDARIO / AGENDAMENTO -->
+    <div class="sched-section" id="schedSection">
+      <div class="sched-header" id="schedHeaderBtn">
+        <div class="ctrl-title" style="color:#A855F7">&#128197; AGENDAMENTO SEMANAL</div>
+        <div class="sched-toggle">
+          <div class="sched-master-toggle" id="schedMasterToggle" title="Ativar/desativar agendamento"></div>
+          <span class="sched-chevron" id="schedChevron">&#9660;</span>
+        </div>
+      </div>
+      <div class="sched-body" id="schedBody">
+        <div class="sched-inner">
+          <div class="sched-days" id="schedDays">
+            <!-- Gerado via JS -->
+          </div>
+          <div class="sched-footer">
+            <button class="sched-save-btn" id="schedSaveBtn">&#10003; Salvar Agenda</button>
+            <span class="sched-save-msg" id="schedSaveMsg">Salvo!</span>
+            <span class="sched-status" id="schedStatus">Desativado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SAFETY GUARD v2 -->
+    <div class="ctrl" id="safetySection" style="display:none">
+
+      <!-- Cabeçalho -->
+      <div class="safety-header">
+        <div class="ctrl-title" style="color:#00B894">&#128737; PROTECAO DA CONTA</div>
+      </div>
+
+      <!-- Perfil da conta -->
+      <div style="margin-bottom:10px">
+        <div class="safety-limits-title" style="margin-bottom:6px">Perfil da Conta</div>
+        <div style="display:flex;gap:4px">
+          <button class="safety-preset-btn" data-preset="nova" id="presetNova">Conta Nova<br><span style="font-size:8px;opacity:.6">&lt; 3 meses</span></button>
+          <button class="safety-preset-btn active" data-preset="media" id="presetMedia">Conta Media<br><span style="font-size:8px;opacity:.6">3-12 meses</span></button>
+          <button class="safety-preset-btn" data-preset="madura" id="presetMadura">Conta Madura<br><span style="font-size:8px;opacity:.6">&gt; 1 ano</span></button>
+        </div>
+      </div>
+
+      <!-- Termômetro de Risco -->
+      <div class="sv2-risk-panel" id="sv2RiskPanel">
+        <div class="sv2-risk-header">
+          <span class="sv2-risk-label" id="sv2RiskLabel">&#128994; Risco Seguro</span>
+          <span class="sv2-risk-pct" id="sv2RiskPct">0/100</span>
+        </div>
+        <div class="sv2-thermometer">
+          <div class="sv2-therm-fill" id="sv2ThermFill" style="width:0%;background:#00B894"></div>
+          <div class="sv2-therm-mark" id="sv2ThermMark" style="left:55%">
+            <span class="sv2-therm-mark-label" id="sv2ThermMarkLabel">limite: 55</span>
+          </div>
+        </div>
+        <!-- Cooldown -->
+        <div class="sv2-cooldown-bar" id="sv2CooldownBar" style="display:none">
+          <span>&#9200;</span>
+          <span id="sv2CooldownText">Pausa de segurança: -- min</span>
+          <span class="sv2-cooldown-reason" id="sv2CooldownReason"></span>
+        </div>
+        <!-- Incidentes do dia -->
+        <div class="sv2-incidents" id="sv2Incidents" style="display:none">
+          <span id="sv2IncBlocks" class="sv2-inc sv2-inc-block">0 block</span>
+          <span id="sv2IncRate"   class="sv2-inc sv2-inc-rate">0 rate</span>
+          <span id="sv2IncSoft"   class="sv2-inc sv2-inc-soft">0 soft</span>
+        </div>
+      </div>
+
+      <!-- Orçamento Diário -->
+      <div class="sv2-budget-panel">
+        <div class="sv2-budget-header">
+          <span class="sv2-budget-title">&#128200; Orçamento do Dia</span>
+          <span class="sv2-budget-nums">
+            <span id="sv2BudgetUsed">0</span><span style="opacity:.5">/</span><span id="sv2BudgetMax">80</span>
+            <span style="opacity:.5;font-size:9px;margin-left:2px">pts</span>
+          </span>
+        </div>
+        <div class="sv2-budget-bar">
+          <div class="sv2-budget-fill" id="sv2BudgetFill" style="width:0%"></div>
+        </div>
+        <div class="sv2-budget-hint" id="sv2BudgetHint"></div>
+      </div>
+
+      <!-- Modo de Operação -->
+      <div style="margin-bottom:10px">
+        <div class="safety-limits-title" style="margin-bottom:6px">Modo de Operação</div>
+        <div style="display:flex;gap:4px">
+          <button class="sv2-mode-btn" data-mode="silent"   id="modeSilent">&#128022; Silencioso<br><span style="font-size:8px;opacity:.6">Máx. proteção</span></button>
+          <button class="sv2-mode-btn active" data-mode="balanced" id="modeBalanced">&#9878;&#65039; Equilibrado<br><span style="font-size:8px;opacity:.6">Padrão</span></button>
+          <button class="sv2-mode-btn" data-mode="active"  id="modeActive">&#128640; Ativo<br><span style="font-size:8px;opacity:.6">Mais ações</span></button>
+        </div>
+        <div class="sv2-mode-info" id="sv2ModeInfo">Balanceia produtividade e segurança. Pausa quando risco ≥ 55/100.</div>
+      </div>
+
+      <!-- Janela de Horário -->
+      <div class="sv2-window-panel">
+        <div class="sv2-window-header">
+          <span class="safety-limits-title">&#128336; Horário Ativo</span>
+          <span class="sv2-window-status" id="sv2WindowStatus">&#128994; Ativo agora</span>
+        </div>
+        <div class="sv2-window-row">
+          <div class="sv2-window-field">
+            <label>Início</label>
+            <select id="sv2WinStart" class="sv2-select"></select>
+          </div>
+          <div class="sv2-window-sep">&#8594;</div>
+          <div class="sv2-window-field">
+            <label>Fim</label>
+            <select id="sv2WinEnd" class="sv2-select"></select>
+          </div>
+          <button class="sv2-win-save-btn" id="sv2WinSave">Salvar</button>
+        </div>
+        <div class="sv2-budget-hint" id="sv2WindowHint"></div>
+      </div>
+
+    </div>
+
+    <!-- CONTADORES -->
+
+    <div class="st">Sessao Atual</div>
+    <div class="cg">
+      <div class="ci f"><div class="cv" id="cF">0</div><div class="cl">Follows</div></div>
+      <div class="ci u"><div class="cv" id="cU">0</div><div class="cl">Unfollows</div></div>
+      <div class="ci l"><div class="cv" id="cL">0</div><div class="cl">Likes</div></div>
+      <div class="ci s"><div class="cv" id="cS">0</div><div class="cl">Skips</div></div>
+      <div class="ci e"><div class="cv" id="cE">0</div><div class="cl">Erros</div></div>
+      <div class="ci b"><div class="cv" id="cB">0</div><div class="cl">Blocks</div></div>
+    </div>
+    <div class="meta">
+      <div class="meta-item"><div class="meta-val" id="mRate">0</div><div class="meta-lbl">Acoes/hora</div></div>
+      <div class="meta-item"><div class="meta-val" id="mTotal">0</div><div class="meta-lbl">Total</div></div>
+      <div class="meta-item"><div class="meta-val" id="mQueue">0</div><div class="meta-lbl">Retry</div></div>
+    </div>
+    <div class="br">
+      <button class="sec" id="bR">Resetar Sessao</button>
+      <button class="main" id="bD" style="font-size:12px">Abrir Dashboard</button>
+    </div>
+    <div class="dv"></div>
+    <button class="dan" id="bO">Sair da Conta</button>
+    <div class="sync-info" id="syncInfo">--</div>
+    <div class="sync-details" id="syncDetails">
+      <span class="sync-detail"><span class="dot-ok"></span><span id="syncWrites">0 escritas</span></span>
+      <span class="sync-detail"><span class="dot-err" style="display:none" id="syncErrDot"></span><span id="syncErrors"></span></span>
+      <span class="sync-detail" id="syncRetryInfo" style="display:none"><span id="syncRetry">0 retry</span></span>
+    </div>
+  </div>
+
+  <!-- NAO LOGADO -->
+  <div id="off">
+    <div class="st">Entrar com sua conta do Dashboard</div>
+    <div class="fd"><label class="fl">Email</label><input type="email" id="iE" placeholder="seu@email.com" /></div>
+    <div class="fd"><label class="fl">Senha</label><input type="password" id="iP" placeholder="Sua senha" /></div>
+    <button class="main" id="bI">Entrar</button>
+  </div>
+  <div id="mg" class="msg"></div>
+</div>
+<script src="lovable-config.js"></script>
+<script src="lovable-http.js"></script>
+<script src="lovable-popup.js"></script>
+</body>
+</html>

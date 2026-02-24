@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Exportar ícones PNG do instagram.svg</title>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 20px; }
+    .preview { display: flex; gap: 16px; margin: 16px 0; align-items: flex-end; }
+    .preview figure { margin: 0; text-align: center; }
+    .preview canvas { border: 1px solid #ccc; display: block; }
+    .preview figcaption { font-size: 12px; margin-top: 4px; }
+    button { padding: 8px 16px; margin: 4px; cursor: pointer; }
+    .msg { margin-top: 12px; color: #066; }
+  </style>
+</head>
+<body>
+  <h1>Gerar ícones PNG a partir de instagram.svg</h1>
+  <p>Esta página usa o conteúdo do <strong>instagram.svg</strong> (igual ao da pasta) para gerar os 3 PNG. Abra este arquivo no Chrome.</p>
+  <div class="preview" id="preview"></div>
+  <div>
+    <button id="btn16">Baixar icon_16.png</button>
+    <button id="btn48">Baixar icon_48.png</button>
+    <button id="btn128">Baixar icon_128.png</button>
+    <button id="btnAll">Baixar os 3</button>
+  </div>
+  <p class="msg" id="msg"></p>
+
+  <script>
+    // Conteúdo idêntico ao instagram.svg (Instagram com gradiente)
+    const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" viewBox="0 0 16 16" id="instagram">
+  <linearGradient id="a" x1="1.464" x2="14.536" y1="14.536" y2="1.464" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#FFC107"></stop>
+    <stop offset=".507" stop-color="#F44336"></stop>
+    <stop offset=".99" stop-color="#9C27B0"></stop>
+  </linearGradient>
+  <path fill="url(#a)" d="M11 0H5a5 5 0 0 0-5 5v6a5 5 0 0 0 5 5h6a5 5 0 0 0 5-5V5a5 5 0 0 0-5-5zm3.5 11c0 1.93-1.57 3.5-3.5 3.5H5c-1.93 0-3.5-1.57-3.5-3.5V5c0-1.93 1.57-3.5 3.5-3.5h6c1.93 0 3.5 1.57 3.5 3.5v6z"></path>
+  <linearGradient id="b" x1="5.172" x2="10.828" y1="10.828" y2="5.172" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#FFC107"></stop>
+    <stop offset=".507" stop-color="#F44336"></stop>
+    <stop offset=".99" stop-color="#9C27B0"></stop>
+  </linearGradient>
+  <path fill="url(#b)" d="M8 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 6.5A2.503 2.503 0 0 1 5.5 8c0-1.379 1.122-2.5 2.5-2.5s2.5 1.121 2.5 2.5c0 1.378-1.122 2.5-2.5 2.5z"></path>
+  <linearGradient id="c" x1="11.923" x2="12.677" y1="4.077" y2="3.323" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#FFC107"></stop>
+    <stop offset=".507" stop-color="#F44336"></stop>
+    <stop offset=".99" stop-color="#9C27B0"></stop>
+  </linearGradient>
+  <circle cx="12.3" cy="3.7" r=".533" fill="url(#c)"></circle>
+</svg>`;
+
+    const sizes = [16, 48, 128];
+    const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+
+    function draw(size) {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, size, size);
+      ctx.drawImage(img, 0, 0, size, size);
+      return canvas;
+    }
+
+    function download(canvas, name) {
+      const a = document.createElement('a');
+      a.download = name;
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+      document.getElementById('msg').textContent = 'Baixado: ' + name;
+    }
+
+    img.onerror = function () {
+      document.getElementById('msg').textContent = 'Erro ao carregar o SVG. Use o Chrome.';
+    };
+
+    img.onload = function () {
+      URL.revokeObjectURL(url);
+      const preview = document.getElementById('preview');
+      sizes.forEach(size => {
+        const fig = document.createElement('figure');
+        const canvas = draw(size);
+        const cap = document.createElement('figcaption');
+        cap.textContent = size + '×' + size;
+        fig.appendChild(canvas);
+        fig.appendChild(cap);
+        preview.appendChild(fig);
+      });
+
+      document.getElementById('btn16').onclick = () => download(draw(16), 'icon_16.png');
+      document.getElementById('btn48').onclick = () => download(draw(48), 'icon_48.png');
+      document.getElementById('btn128').onclick = () => download(draw(128), 'icon_128.png');
+      document.getElementById('btnAll').onclick = () => {
+        download(draw(16), 'icon_16.png');
+        setTimeout(() => download(draw(48), 'icon_48.png'), 300);
+        setTimeout(() => download(draw(128), 'icon_128.png'), 600);
+      };
+      document.getElementById('msg').textContent = 'Pronto. Clique nos botões para baixar e substitua os PNG na pasta da extensão.';
+    };
+
+    img.src = url;
+  </script>
+</body>
+</html>
